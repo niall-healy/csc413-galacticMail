@@ -52,8 +52,10 @@ public class CollisionDetector {
     }
 
     public static void shipHitAsteroid(Ship ship, Asteroid asteroid) {
-        ship.respawn();
-        //asteroid.selfDestruct();
+        if(ship.getMoonOn() == null) {
+            //ship.respawn();
+            asteroid.selfDestruct();
+        }
     }
 
     public static void shipHitPowerUp(Ship ship, PowerUp powerUp) {
@@ -61,6 +63,11 @@ public class CollisionDetector {
     }
 
     public static void shipHitMoon(Ship ship, Moon moon) {
+        if(ship.getMoonOn() == null) {
+            ship.setMoonOn(moon);
 
+            //ship.setX(moon.getX() + (moon.getImage().getWidth()/2 - ship.getImage().getWidth()/2));
+            //ship.setY(moon.getY() + (moon.getImage().getHeight()/2 - ship.getImage().getHeight()/2));
+        }
     }
 }

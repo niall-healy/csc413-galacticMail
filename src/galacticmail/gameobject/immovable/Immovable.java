@@ -1,8 +1,6 @@
 package galacticmail.gameobject.immovable;
 
 import galacticmail.gameobject.GameObject;
-import galacticmail.resourcetable.Resource;
-import galacticmail.resourcetable.Sprite;
 
 import java.awt.image.BufferedImage;
 

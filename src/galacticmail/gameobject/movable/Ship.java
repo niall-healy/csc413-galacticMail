@@ -1,14 +1,14 @@
 package galacticmail.gameobject.movable;
 
 import galacticmail.GameWorld;
-import galacticmail.resourcetable.Resource;
-import galacticmail.resourcetable.Sprite;
+import galacticmail.gameobject.immovable.Moon;
 
 import java.awt.image.BufferedImage;
 
 public class Ship extends Movable {
 
     private int tickCountGotLightning;
+    private int tickLastLeftMoon;
 
     private int numLives;
 
@@ -16,12 +16,11 @@ public class Ship extends Movable {
     private int startingY;
 
     private boolean hasLightning;
+    private Moon moonOn;
 
-    private boolean upPressed;
-    private boolean downPressed;
+    private boolean launchPressed;
     private boolean rightPressed;
     private boolean leftPressed;
-    private boolean shootPressed;
 
 
     public Ship(int x, int y, int vx, int vy, int angle, BufferedImage image) {
@@ -31,16 +30,14 @@ public class Ship extends Movable {
         this.startingY = y;
 
         this.hasLightning = false;
+        this.moonOn = null;
 
-        this.numLives = 3;
+        this.numLives = 1;
+        this.tickLastLeftMoon = 0;
     }
 
-    public void toggleUpPressed() {
-        this.upPressed = true;
-    }
-
-    public void toggleDownPressed() {
-        this.downPressed = true;
+    public void toggleLaunchPressed() {
+        this.launchPressed = true;
     }
 
     public void toggleRightPressed() {
@@ -51,12 +48,8 @@ public class Ship extends Movable {
         this.leftPressed = true;
     }
 
-    public void unToggleUpPressed() {
-        this.upPressed = false;
-    }
-
-    public void unToggleDownPressed() {
-        this.downPressed = false;
+    public void unToggleLaunchPressed() {
+        this.launchPressed = false;
     }
 
     public void unToggleRightPressed() {
@@ -70,15 +63,24 @@ public class Ship extends Movable {
     @Override
     public void update() {
 
-        if(numLives == 0) {
+        if(numLives <= 0) {
             GameWorld.setGameOver(true);
         }
 
-        if (this.upPressed) {
+        if(this.moonOn == null) {
+            this.setRotationSpeed(2);
             this.moveForwards();
         }
-        if (this.downPressed) {
-            this.moveBackwards();
+        else {
+            this.setRotationSpeed(3);
+            GameWorld.decrementScore();
+        }
+
+        if (this.launchPressed && (GameWorld.tickCount - this.tickLastLeftMoon) > 30 && this.moonOn != null) {
+            GameWorld.incrementScore();
+            this.moonOn.selfDestruct();
+            this.moonOn = null;
+            this.tickLastLeftMoon = GameWorld.tickCount;
         }
 
         if (this.leftPressed) {
@@ -115,5 +117,13 @@ public class Ship extends Movable {
 
     public int getNumLives() {
         return numLives;
+    }
+
+    public Moon getMoonOn() {
+        return moonOn;
+    }
+
+    public void setMoonOn(Moon moonOn) {
+        this.moonOn = moonOn;
     }
 }

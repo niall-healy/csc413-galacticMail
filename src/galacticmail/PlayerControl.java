@@ -8,15 +8,13 @@ import java.awt.event.KeyListener;
 public class PlayerControl implements KeyListener {
 
     private Ship ship;
-    private final int up;
-    private final int down;
+    private final int launch;
     private final int right;
     private final int left;
 
-    public PlayerControl(Ship ship, int up, int down, int left, int right) {
+    public PlayerControl(Ship ship, int launch, int left, int right) {
         this.ship = ship;
-        this.up = up;
-        this.down = down;
+        this.launch = launch;
         this.right = right;
         this.left = left;
     }
@@ -29,11 +27,8 @@ public class PlayerControl implements KeyListener {
     @Override
     public void keyPressed(KeyEvent ke) {
         int keyPressed = ke.getKeyCode();
-        if (keyPressed == up) {
-            this.ship.toggleUpPressed();
-        }
-        if (keyPressed == down) {
-            this.ship.toggleDownPressed();
+        if (keyPressed == launch) {
+            this.ship.toggleLaunchPressed();
         }
         if (keyPressed == left) {
             this.ship.toggleLeftPressed();
@@ -47,11 +42,8 @@ public class PlayerControl implements KeyListener {
     @Override
     public void keyReleased(KeyEvent ke) {
         int keyReleased = ke.getKeyCode();
-        if (keyReleased  == up) {
-            this.ship.unToggleUpPressed();
-        }
-        if (keyReleased == down) {
-            this.ship.unToggleDownPressed();
+        if (keyReleased  == launch) {
+            this.ship.unToggleLaunchPressed();
         }
         if (keyReleased  == left) {
             this.ship.unToggleLeftPressed();

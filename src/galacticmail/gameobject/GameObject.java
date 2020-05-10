@@ -1,9 +1,5 @@
 package galacticmail.gameobject;
 
-import galacticmail.resourcetable.Resource;
-import galacticmail.resourcetable.Sprite;
-import galacticmail.resourcetable.SpriteList;
-
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -66,6 +62,10 @@ public abstract class GameObject {
 
     public void setHitBoxLocation(int x, int y) {
         this.hitBox.setLocation(x, y);
+    }
+
+    public void setHitBox(Rectangle hitBox) {
+        this.hitBox = hitBox;
     }
 
     public void drawImage(Graphics g) {

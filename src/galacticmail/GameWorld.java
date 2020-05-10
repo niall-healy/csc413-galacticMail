@@ -1,11 +1,11 @@
 package galacticmail;
 
 import galacticmail.gameobject.GameObject;
+import galacticmail.gameobject.immovable.Moon;
+import galacticmail.gameobject.movable.Asteroid;
 import galacticmail.gameobject.movable.Ship;
 import galacticmail.hud.Hud;
-import galacticmail.resourcetable.Resource;
 import galacticmail.resourcetable.ResourceTable;
-import galacticmail.resourcetable.Sprite;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,9 +21,11 @@ public class GameWorld extends JPanel {
     private JFrame jFrame;
     private Hud hud;
 
+    private static MapLoader mapLoader;
     private static ArrayList<GameObject> gameObjectArrayList;
 
     public static int tickCount = 0;
+    public static int score = 0;
 
     private static Boolean isRunning = true;
     private static Boolean gameOver = false;
@@ -34,11 +36,14 @@ public class GameWorld extends JPanel {
 
         try {
             while (isRunning) {
-                gameObjectArrayList.forEach(GameObject::update);
+                mapLoader.update();
+                for(int i = 0; i < gameObjectArrayList.size(); i++) {
+                    gameObjectArrayList.get(i).update();
+                }
 
                 CollisionDetector.detectCollisions(gameObjectArrayList);
 
-                //gameWorld.hud.update();
+                gameWorld.hud.update();
 
                 gameWorld.repaint();
                 tickCount++;
@@ -55,7 +60,7 @@ public class GameWorld extends JPanel {
         this.jFrame = new JFrame("Galactic Mail");
         this.world = new BufferedImage(GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
-        //this.hud = new Hud();
+        this.hud = new Hud();
 
         gameObjectArrayList = new ArrayList<>();
 
@@ -63,14 +68,13 @@ public class GameWorld extends JPanel {
 
         Ship player = new Ship(170, 170, 0, 0, 0, ResourceTable.getImage("ship"));
         PlayerControl playerControl = new PlayerControl(player,
-                KeyEvent.VK_W,
-                KeyEvent.VK_S,
+                KeyEvent.VK_SPACE,
                 KeyEvent.VK_A,
                 KeyEvent.VK_D);
 
         gameObjectArrayList.add(player);
 
-        //hud.init(player);
+        mapLoader = new MapLoader(player);
 
         this.jFrame.setLayout(new BorderLayout());
         this.jFrame.add(this);
@@ -91,7 +95,7 @@ public class GameWorld extends JPanel {
         g2.fillRect(0, 0, GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT);
 
         if(gameOver) {
-            String gameOverMessage = "Game Over!";
+            String gameOverMessage = "Game Over! Score: " + score;
             String restartMessage = "Exit and reopen to play again";
 
             g2.setFont(new Font("Monospaced", Font.BOLD + Font.ITALIC, 50));
@@ -106,7 +110,7 @@ public class GameWorld extends JPanel {
 
             g2.drawImage(world, 0, 0, null);
 
-            //hud.drawImage(g);
+            hud.drawImage(g);
         }
     }
 
@@ -122,8 +126,19 @@ public class GameWorld extends JPanel {
     }
 
     private void drawObjects(Graphics g) {
+        Ship player = null;
         for(int i = 0; i < gameObjectArrayList.size(); i++) {
-            gameObjectArrayList.get(i).drawImage(g);
+            if(gameObjectArrayList.get(i) instanceof Ship) {
+                player = (Ship)gameObjectArrayList.get(i);
+            } else {
+                gameObjectArrayList.get(i).drawImage(g);
+            }
+        }
+
+        if(player == null) {
+            System.out.println("No ship reference in list");
+        } else {
+            player.drawImage(g);
         }
     }
 
@@ -131,4 +146,46 @@ public class GameWorld extends JPanel {
         GameWorld.gameOver = bool;
     }
 
+    public static void gameObjectArrayListAdd(GameObject object) {
+        gameObjectArrayList.add(object);
+    }
+
+    public static void gameObjectArrayListRemove(int index) {
+        if(gameObjectArrayList.get(index) instanceof Moon) {
+            mapLoader.decrementMoonCount();
+        }
+        gameObjectArrayList.remove(index);
+
+        //update all subsequent asteroidID's & moonID's
+        for(int i = index; i < gameObjectArrayList.size(); i++) {
+            if(gameObjectArrayList.get(i) instanceof Asteroid) {
+                ((Asteroid)gameObjectArrayList.get(i)).setAsteroidID(i);
+            }
+            else if(gameObjectArrayList.get(i) instanceof Moon) {
+                ((Moon)gameObjectArrayList.get(i)).setMoonID(i);
+            }
+        }
+    }
+
+    public static int getObjectListSize() {
+        return gameObjectArrayList.size();
+    }
+
+    public static int getScore() {
+        return score;
+    }
+
+    public static void incrementScore() {
+        score += 1000;
+    }
+
+    public static void decrementScore() {
+        if(score > 0) {
+            score -= 1;
+        }
+    }
+
+    public static int getLevel() {
+        return mapLoader.getLevelNum();
+    }
 }
