@@ -25,6 +25,7 @@ public class ResourceTable {
 
             ResourceTable.imageTable.put("asteroid", read(Objects.requireNonNull(GameWorld.class.getClassLoader().getResource("Asteroid.png"))) );
             ResourceTable.imageTable.put("ship", read(Objects.requireNonNull(GameWorld.class.getClassLoader().getResource("galactic.png"))) );
+            ResourceTable.imageTable.put("landed", read(Objects.requireNonNull(GameWorld.class.getClassLoader().getResource("Landed.png"))) );
             ResourceTable.imageTable.put("background", read(Objects.requireNonNull(GameWorld.class.getClassLoader().getResource("background.jpg"))) );
             ResourceTable.imageTable.put("base0", read(Objects.requireNonNull(GameWorld.class.getClassLoader().getResource("Base1.png"))) );
             ResourceTable.imageTable.put("base1", read(Objects.requireNonNull(GameWorld.class.getClassLoader().getResource("Base2.png"))) );

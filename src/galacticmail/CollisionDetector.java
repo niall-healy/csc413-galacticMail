@@ -53,7 +53,7 @@ public class CollisionDetector {
 
     public static void shipHitAsteroid(Ship ship, Asteroid asteroid) {
         if(ship.getMoonOn() == null) {
-            //ship.respawn();
+            ship.respawn();
             asteroid.selfDestruct();
         }
     }

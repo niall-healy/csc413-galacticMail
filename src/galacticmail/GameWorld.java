@@ -26,6 +26,7 @@ public class GameWorld extends JPanel {
 
     public static int tickCount = 0;
     public static int score = 0;
+    public static int numLives;
 
     private static Boolean isRunning = true;
     private static Boolean gameOver = false;
@@ -36,6 +37,9 @@ public class GameWorld extends JPanel {
 
         try {
             while (isRunning) {
+                if(numLives <= 0) {
+                    gameOver = true;
+                }
                 mapLoader.update();
                 for(int i = 0; i < gameObjectArrayList.size(); i++) {
                     gameObjectArrayList.get(i).update();
@@ -60,11 +64,10 @@ public class GameWorld extends JPanel {
         this.jFrame = new JFrame("Galactic Mail");
         this.world = new BufferedImage(GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
-        this.hud = new Hud();
-
         gameObjectArrayList = new ArrayList<>();
 
         ResourceTable.init();
+        this.hud = new Hud();
 
         Ship player = new Ship(170, 170, 0, 0, 0, ResourceTable.getImage("ship"));
         PlayerControl playerControl = new PlayerControl(player,
@@ -75,6 +78,8 @@ public class GameWorld extends JPanel {
         gameObjectArrayList.add(player);
 
         mapLoader = new MapLoader(player);
+
+        numLives = 5;
 
         this.jFrame.setLayout(new BorderLayout());
         this.jFrame.add(this);
@@ -187,5 +192,13 @@ public class GameWorld extends JPanel {
 
     public static int getLevel() {
         return mapLoader.getLevelNum();
+    }
+
+    public static void loseLife() {
+        numLives--;
+    }
+
+    public static int getNumLives() {
+        return numLives;
     }
 }

@@ -2,6 +2,7 @@ package galacticmail.gameobject.movable;
 
 import galacticmail.GameWorld;
 import galacticmail.gameobject.immovable.Moon;
+import galacticmail.resourcetable.ResourceTable;
 
 import java.awt.image.BufferedImage;
 
@@ -9,11 +10,7 @@ public class Ship extends Movable {
 
     private int tickCountGotLightning;
     private int tickLastLeftMoon;
-
-    private int numLives;
-
-    private int startingX;
-    private int startingY;
+    private int tickLastTookDamage;
 
     private boolean hasLightning;
     private Moon moonOn;
@@ -26,14 +23,11 @@ public class Ship extends Movable {
     public Ship(int x, int y, int vx, int vy, int angle, BufferedImage image) {
         super(x, y, vx, vy, angle, image);
 
-        this.startingX = x;
-        this.startingY = y;
-
         this.hasLightning = false;
         this.moonOn = null;
 
-        this.numLives = 1;
         this.tickLastLeftMoon = 0;
+        this.tickLastTookDamage = 0;
     }
 
     public void toggleLaunchPressed() {
@@ -63,20 +57,18 @@ public class Ship extends Movable {
     @Override
     public void update() {
 
-        if(numLives <= 0) {
-            GameWorld.setGameOver(true);
-        }
-
         if(this.moonOn == null) {
             this.setRotationSpeed(2);
+            this.setImage(ResourceTable.getImage("ship"));
             this.moveForwards();
         }
         else {
             this.setRotationSpeed(3);
+            this.setImage(ResourceTable.getImage("landed"));
             GameWorld.decrementScore();
         }
 
-        if (this.launchPressed && (GameWorld.tickCount - this.tickLastLeftMoon) > 30 && this.moonOn != null) {
+        if (this.launchPressed && (GameWorld.tickCount - this.tickLastLeftMoon) > 50 && this.moonOn != null) {
             GameWorld.incrementScore();
             this.moonOn.selfDestruct();
             this.moonOn = null;
@@ -107,16 +99,11 @@ public class Ship extends Movable {
     }
 
     public void respawn() {
-        this.setX(this.startingX);
-        this.setY(this.startingY);
+        if(GameWorld.tickCount - this.tickLastTookDamage >= 50) {
+            GameWorld.loseLife();
 
-        this.numLives--;
-
-        this.setHitBoxLocation(this.startingX, this.startingY);
-    }
-
-    public int getNumLives() {
-        return numLives;
+            this.tickLastTookDamage = GameWorld.tickCount;
+        }
     }
 
     public Moon getMoonOn() {
