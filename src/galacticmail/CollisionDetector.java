@@ -1,11 +1,13 @@
 package galacticmail;
 
 import galacticmail.gameobject.GameObject;
+import galacticmail.gameobject.immovable.Explosion;
 import galacticmail.gameobject.immovable.Immovable;
 import galacticmail.gameobject.immovable.Moon;
 import galacticmail.gameobject.immovable.PowerUp;
 import galacticmail.gameobject.movable.Asteroid;
 import galacticmail.gameobject.movable.Ship;
+import galacticmail.resourcetable.ResourceTable;
 
 import java.util.ArrayList;
 
@@ -55,6 +57,7 @@ public class CollisionDetector {
         if(ship.getMoonOn() == null) {
             ship.respawn();
             asteroid.selfDestruct();
+            GameWorld.gameObjectArrayListAdd(new Explosion(asteroid.getX(), asteroid.getY(), 0, GameWorld.getObjectListSize()));
         }
     }
 

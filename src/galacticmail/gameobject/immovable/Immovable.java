@@ -2,6 +2,7 @@ package galacticmail.gameobject.immovable;
 
 import galacticmail.gameobject.GameObject;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Immovable extends GameObject {
@@ -11,5 +12,10 @@ public abstract class Immovable extends GameObject {
     }
 
     public void update() { }
+
+    @Override
+    public void drawImage(Graphics g) {
+        super.drawImage(g);
+    }
 
 }

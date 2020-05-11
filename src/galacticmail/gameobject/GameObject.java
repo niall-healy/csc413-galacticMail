@@ -21,7 +21,13 @@ public abstract class GameObject {
         this.y = y;
         this.angle = angle;
         this.image = image;
-        this.hitBox = new Rectangle(x, y, this.getImage().getWidth(), this.getImage().getHeight());
+
+        if(image != null) {
+            this.hitBox = new Rectangle(x, y, this.getImage().getWidth(), this.getImage().getHeight());
+        }
+        else {
+            this.hitBox = new Rectangle(-50, -50, 1, 1);
+        }
     }
 
     public int getX(){

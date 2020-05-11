@@ -40,7 +40,7 @@ public class MapLoader {
             GameWorld.setGameOver(true);
         } else {
             //System.out.println(levelNum);
-            BufferedReader bufferedReader = ResourceTable.getMap("map" + levelNum);
+            BufferedReader bufferedReader = ResourceTable.getTxt("map" + levelNum);
             String line;
             int lineCounter = 0;
             int unit = 32;

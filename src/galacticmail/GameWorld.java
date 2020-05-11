@@ -1,6 +1,7 @@
 package galacticmail;
 
 import galacticmail.gameobject.GameObject;
+import galacticmail.gameobject.immovable.Explosion;
 import galacticmail.gameobject.immovable.Moon;
 import galacticmail.gameobject.movable.Asteroid;
 import galacticmail.gameobject.movable.Ship;
@@ -18,7 +19,7 @@ public class GameWorld extends JPanel {
     public static final int SCREEN_HEIGHT = 736;
     private BufferedImage world;
     private Graphics2D buffer;
-    private JFrame jFrame;
+    private static JFrame jFrame;
     private Hud hud;
 
     private static MapLoader mapLoader;
@@ -61,7 +62,7 @@ public class GameWorld extends JPanel {
     }
 
     private void init() {
-        this.jFrame = new JFrame("Galactic Mail");
+        jFrame = new JFrame("Galactic Mail");
         this.world = new BufferedImage(GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
         gameObjectArrayList = new ArrayList<>();
@@ -81,14 +82,14 @@ public class GameWorld extends JPanel {
 
         numLives = 5;
 
-        this.jFrame.setLayout(new BorderLayout());
-        this.jFrame.add(this);
-        this.jFrame.addKeyListener(playerControl);
-        this.jFrame.setSize(GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT + 30);
-        this.jFrame.setResizable(false);
+        jFrame.setLayout(new BorderLayout());
+        jFrame.add(this);
+        jFrame.addKeyListener(playerControl);
+        jFrame.setSize(GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT + 30);
+        jFrame.setResizable(false);
         jFrame.setLocationRelativeTo(null);
-        this.jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.jFrame.setVisible(true);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setVisible(true);
     }
 
     public void paintComponent(Graphics g) {
@@ -132,11 +133,11 @@ public class GameWorld extends JPanel {
 
     private void drawObjects(Graphics g) {
         Ship player = null;
-        for(int i = 0; i < gameObjectArrayList.size(); i++) {
-            if(gameObjectArrayList.get(i) instanceof Ship) {
-                player = (Ship)gameObjectArrayList.get(i);
+        for (GameObject gameObject : gameObjectArrayList) {
+            if (gameObject instanceof Ship) {
+                player = (Ship) gameObject;
             } else {
-                gameObjectArrayList.get(i).drawImage(g);
+                gameObject.drawImage(g);
             }
         }
 
@@ -161,13 +162,16 @@ public class GameWorld extends JPanel {
         }
         gameObjectArrayList.remove(index);
 
-        //update all subsequent asteroidID's & moonID's
+        //update all subsequent asteroidID's, moonID's, & ExplosionID's
         for(int i = index; i < gameObjectArrayList.size(); i++) {
             if(gameObjectArrayList.get(i) instanceof Asteroid) {
                 ((Asteroid)gameObjectArrayList.get(i)).setAsteroidID(i);
             }
             else if(gameObjectArrayList.get(i) instanceof Moon) {
                 ((Moon)gameObjectArrayList.get(i)).setMoonID(i);
+            }
+            else if(gameObjectArrayList.get(i) instanceof Explosion) {
+                ((Explosion)gameObjectArrayList.get(i)).setExplosionID(i);
             }
         }
     }
