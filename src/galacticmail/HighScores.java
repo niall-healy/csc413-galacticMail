@@ -14,13 +14,13 @@ public class HighScores {
         scoreMap = new TreeMap<>(Collections.reverseOrder());
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         HighScores hs = new HighScores();
 
         hs.getScoresFromFile();
 
-        hs.writeScoresToFile(24000, "AE");
-    }
+        hs.writeScoresToFile(24000, "Initials");
+    }*/
 
     public void getScoresFromFile() {
         try {
