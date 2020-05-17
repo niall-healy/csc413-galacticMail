@@ -1,8 +1,6 @@
 package galacticmail;
 
-import galacticmail.gameobject.immovable.DoublePoints;
 import galacticmail.gameobject.immovable.Moon;
-import galacticmail.gameobject.immovable.SpeedUp;
 import galacticmail.gameobject.movable.Asteroid;
 import galacticmail.gameobject.movable.Ship;
 import galacticmail.resourcetable.ResourceTable;
@@ -61,12 +59,6 @@ public class MapLoader {
                     }
                     else if(line.charAt(i) == '2') {
                         GameWorld.gameObjectArrayListAdd( new Asteroid(i * unit, lineCounter * unit, random.nextInt(360), random.nextBoolean(), GameWorld.getObjectListSize(), ResourceTable.getImage("asteroid")) );
-                    }
-                    else if(line.charAt(i) == '3') {
-                        GameWorld.gameObjectArrayListAdd(new SpeedUp(i * unit, lineCounter * unit, 0, ResourceTable.getImage("speedUp")) );
-                    }
-                    else if(line.charAt(i) == '4') {
-                        GameWorld.gameObjectArrayListAdd(new DoublePoints(i * unit, lineCounter * unit, 0, ResourceTable.getImage("doublePoints")) );
                     }
                 }
                 lineCounter++;

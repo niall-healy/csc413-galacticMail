@@ -21,6 +21,7 @@ public class GameWorld extends JPanel {
     private Graphics2D buffer;
     private static JFrame jFrame;
     private Hud hud;
+    private HighScores highScores;
 
     private static MapLoader mapLoader;
     private static ArrayList<GameObject> gameObjectArrayList;
@@ -31,6 +32,7 @@ public class GameWorld extends JPanel {
 
     private static Boolean isRunning = true;
     private static Boolean gameOver = false;
+    private static Boolean newHighScore = false;
 
     public static void main(String[] args) {
         GameWorld gameWorld = new GameWorld();
@@ -66,9 +68,10 @@ public class GameWorld extends JPanel {
         this.world = new BufferedImage(GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
         gameObjectArrayList = new ArrayList<>();
-
         ResourceTable.init();
         this.hud = new Hud();
+        this.highScores = new HighScores();
+        this.highScores.getScoresFromFile();
 
         Ship player = new Ship(170, 170, 0, 0, 0, ResourceTable.getImage("ship"));
         PlayerControl playerControl = new PlayerControl(player,
@@ -101,13 +104,25 @@ public class GameWorld extends JPanel {
         g2.fillRect(0, 0, GameWorld.SCREEN_WIDTH, GameWorld.SCREEN_HEIGHT);
 
         if(gameOver) {
-            String gameOverMessage = "Game Over! Score: " + score;
+            this.highScores.writeScoresToFile(score, "Sorry");
+            ArrayList<String> scoreList =  this.highScores.getScoreArrayList();
+            String gameOverMessage = "Game Over! Your Score: " + score;
             String restartMessage = "Exit and reopen to play again";
 
             g2.setFont(new Font("Monospaced", Font.BOLD + Font.ITALIC, 50));
             g2.setColor(Color.GREEN);
-            g2.drawString(gameOverMessage, 125, 300);
-            g2.drawString(restartMessage, 50, 400);
+            g2.drawString(gameOverMessage, 75, 75);
+
+            if(newHighScore) {
+                g2.drawString("New High Score!!", 250, 160);
+            }
+
+            g2.drawString("High Scores", 320, 250);
+            for(int i = 0; i < scoreList.size(); i++) {
+                g2.drawString(scoreList.get(i), 375, (i * 50) + 320);
+            }
+
+            g2.drawString(restartMessage, 50, 650);
             GameWorld.isRunning = false;
         }
         else {
@@ -133,11 +148,11 @@ public class GameWorld extends JPanel {
 
     private void drawObjects(Graphics g) {
         Ship player = null;
-        for (GameObject gameObject : gameObjectArrayList) {
-            if (gameObject instanceof Ship) {
-                player = (Ship) gameObject;
+        for(int i = 0; i < gameObjectArrayList.size(); i++) {
+            if(gameObjectArrayList.get(i) instanceof Ship) {
+                player = (Ship)gameObjectArrayList.get(i);
             } else {
-                gameObject.drawImage(g);
+                gameObjectArrayList.get(i).drawImage(g);
             }
         }
 
@@ -150,6 +165,10 @@ public class GameWorld extends JPanel {
 
     public static void setGameOver(Boolean bool) {
         GameWorld.gameOver = bool;
+    }
+
+    public static void setNewHighScore(Boolean newHighScore) {
+        GameWorld.newHighScore = newHighScore;
     }
 
     public static void gameObjectArrayListAdd(GameObject object) {

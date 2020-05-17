@@ -4,10 +4,8 @@ import galacticmail.gameobject.GameObject;
 import galacticmail.gameobject.immovable.Explosion;
 import galacticmail.gameobject.immovable.Immovable;
 import galacticmail.gameobject.immovable.Moon;
-import galacticmail.gameobject.immovable.PowerUp;
 import galacticmail.gameobject.movable.Asteroid;
 import galacticmail.gameobject.movable.Ship;
-import galacticmail.resourcetable.ResourceTable;
 
 import java.util.ArrayList;
 
@@ -38,9 +36,6 @@ public class CollisionDetector {
                                 if(innerLoopObject instanceof Asteroid) {
                                     shipHitAsteroid( (Ship)outerLoopObject, (Asteroid)innerLoopObject );
                                 }
-                                else if(innerLoopObject instanceof PowerUp) {
-                                    shipHitPowerUp( (Ship)outerLoopObject, (PowerUp)innerLoopObject );
-                                }
                                 else if(innerLoopObject instanceof Moon) {
                                     shipHitMoon( (Ship)outerLoopObject, (Moon)innerLoopObject );
                                 }
@@ -59,10 +54,6 @@ public class CollisionDetector {
             asteroid.selfDestruct();
             GameWorld.gameObjectArrayListAdd(new Explosion(asteroid.getX(), asteroid.getY(), 0, GameWorld.getObjectListSize()));
         }
-    }
-
-    public static void shipHitPowerUp(Ship ship, PowerUp powerUp) {
-
     }
 
     public static void shipHitMoon(Ship ship, Moon moon) {
