@@ -7,12 +7,9 @@ import galacticmail.resourcetable.ResourceTable;
 import java.awt.image.BufferedImage;
 
 public class Ship extends Movable {
-
-    private int tickCountGotLightning;
     private int tickLastLeftMoon;
     private int tickLastTookDamage;
 
-    private boolean hasLightning;
     private Moon moonOn;
 
     private boolean launchPressed;
@@ -23,7 +20,6 @@ public class Ship extends Movable {
     public Ship(int x, int y, int vx, int vy, int angle, BufferedImage image) {
         super(x, y, vx, vy, angle, image);
 
-        this.hasLightning = false;
         this.moonOn = null;
 
         this.tickLastLeftMoon = 0;
@@ -82,20 +78,11 @@ public class Ship extends Movable {
             this.rotateRight();
         }
 
-        if(GameWorld.tickCount - tickCountGotLightning > 576) {
-            hasLightning = false;
-        }
-
     }
 
     @Override
     public String toString() {
         return "x=" + this.getX() + ", y=" + this.getY() + ", angle=" + this.getAngle();
-    }
-
-    public void gotLightning() {
-        this.tickCountGotLightning = GameWorld.tickCount;
-        this.hasLightning = true;
     }
 
     public void respawn() {

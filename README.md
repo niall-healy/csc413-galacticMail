@@ -1,11 +1,15 @@
 # csc413-SecondGame
 
-## Student Name  :
-## Student ID    :
+## Student Name  : Niall Healy
+## Student ID    : 920745329
 
+#### IDE: IntelliJ IDEA Ultimate 2020.1.1
+#### Java Version: OpenJDK 14.0.1
+# 
+#### Source code is located in /src/
+#### The jar is located in /jar/
+# 
+##### Run the game by navigating to /jar/ in the command line and typing: 
+`java -jar GalacticMail.jar`
 
-## src folder is to be used to store source code only.
-
-## resources folder is to be used to store the resources for your project only. This includes images, sounds, map text files, etc.
-
-## jar folder is used to store the built jar of your term-project. NO SOURCE CODE SHOULD BE IN THIS FOLDER. DOING SO WILL CAUSE POINTS TO BE DEDUCTED
+##### Controls: A-rotate counterclockwise, D-rotate clockwise, SPACE-launch
