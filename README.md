@@ -1,4 +1,4 @@
-# csc413-SecondGame
+# csc413-galacticMail
 
 ## Student Name  : Niall Healy
 ## Student ID    : 920745329
